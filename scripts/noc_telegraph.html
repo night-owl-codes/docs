@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="noc_telegraph - A period-accurate telegraph system for RedM servers by Night Owl Codes.">
+    <meta name="description" content="noc_telegraph - A police activity telegraph board for RedM servers by Night Owl Codes.">
     <meta name="theme-color" content="#140D07">
     <title>noc_telegraph - Night Owl Codes Documentation</title>
     <link rel="stylesheet" href="../styles/main.css">
@@ -161,7 +161,7 @@
                     </svg>
                     <span>Store</span>
                 </a>
-                <a href="https://discord.gg/nightowlcodes" class="nav-item">
+                <a href="https://discord.gg/nKnN7YTXGv" class="nav-item">
                     <svg class="nav-item-icon" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
                     </svg>
@@ -185,12 +185,12 @@
                     </svg>
                     <span>noc_telegraph</span>
                 </a>
-                <a href="noc_bounty.html" class="nav-item">
+                <a href="noc_notify.html" class="nav-item">
                     <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="8" r="7"></circle>
-                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                     </svg>
-                    <span>noc_bounty</span>
+                    <span>noc_notify</span>
                 </a>
             </nav>
             
@@ -205,8 +205,8 @@
                 <a href="#usage" class="nav-item children">
                     <span>Usage</span>
                 </a>
-                <a href="#api" class="nav-item children">
-                    <span>API Reference</span>
+                <a href="#customization" class="nav-item children">
+                    <span>Customization</span>
                 </a>
             </nav>
         </aside>
@@ -243,7 +243,7 @@
                         </svg>
                         <span>GitHub</span>
                     </a>
-                    <a href="https://discord.gg/nightowlcodes" class="header-link">
+                    <a href="https://discord.gg/nKnN7YTXGv" class="header-link">
                         <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
                             <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
                         </svg>
@@ -266,19 +266,20 @@
                                 <span>noc_telegraph</span>
                             </nav>
                             <h1>noc_telegraph</h1>
-                            <p style="font-size: 1.1rem; opacity: 0.8; margin-top: 1rem;">A period-accurate telegraph system for immersive long-distance communication in your RedM server.</p>
+                            <p style="font-size: 1.1rem; opacity: 0.8; margin-top: 1rem;">A police activity telegraph board that displays robbery availability based on current police count. Simple, elegant, and period-appropriate.</p>
                         </div>
                         
-                        <p>The <code>noc_telegraph</code> script brings authentic 1899-era communication to your RedM server. Players can send and receive telegrams through telegraph offices, creating immersive roleplay opportunities for businesses, law enforcement, and personal correspondence.</p>
+                        <p>The <code>noc_telegraph</code> script provides an in-game UI that shows players which robberies are currently available based on the number of police officers on duty. It's designed to work seamlessly with both VORP and Outsider frameworks.</p>
                         
                         <div class="info-box">
                             <div class="info-box-title">✨ Key Features</div>
                             <ul style="margin: 0.5rem 0 0 1rem;">
-                                <li>Period-accurate telegraph system with Morse code aesthetics</li>
-                                <li>Multiple telegraph office locations</li>
-                                <li>Message delivery delays based on distance</li>
-                                <li>Telegram logging for server administrators</li>
-                                <li>Customizable pricing and delivery times</li>
+                                <li>Real-time police count tracking</li>
+                                <li>Configurable robbery requirements</li>
+                                <li>Supports VORP and Outsider frameworks</li>
+                                <li>Clean, period-appropriate UI design</li>
+                                <li>Customizable key binding</li>
+                                <li>Lightweight and optimized</li>
                             </ul>
                         </div>
                         
@@ -296,62 +297,52 @@
                         
                         <pre><code>ensure noc_telegraph</code></pre>
                         
-                        <h3>Step 3: Run Database Migration</h3>
-                        <p>Execute the provided SQL file to create the necessary database tables:</p>
-                        
-                        <pre><code>-- The migration runs automatically on first start
--- Or manually import: noc_telegraph/sql/migration.sql</code></pre>
-                        
-                        <h3>Step 4: Configure</h3>
-                        <p>Open <code>noc_telegraph/config/config.lua</code> to customize the script settings.</p>
-                        
-                        <h2 id="configuration">Configuration</h2>
-                        
-                        <p>The configuration file is organized into several sections for easy customization:</p>
-                        
-                        <h3>General Settings</h3>
+                        <h3>Step 3: Configure</h3>
+                        <p>Open <code>config.lua</code> to customize the framework setting, key binding, and robbery requirements:</p>
                         
                         <pre><code>Config = {}
 
--- General Settings
-Config.Debug = false                    -- Enable debug mode for development
-Config.Locale = 'en'                    -- Language code (en, es, de, fr)
-Config.CurrencySymbol = '$'             -- Currency display symbol
-
--- Telegram Settings
-Config.BasePrice = 5                    -- Base price per telegram
-Config.PricePerWord = 0.10              -- Additional cost per word
-Config.MaxMessageLength = 500           -- Maximum character limit
-Config.DeliveryDelay = 300              -- Base delivery time in seconds</code></pre>
+Config.Script = 'out'         -- 'out' = outsider_policeman | 'vorp' = vorp_police
+Config.Button = 0x156F7119    -- Backspace (change to your preferred key)</code></pre>
                         
-                        <h3>Office Locations</h3>
+                        <h3>Step 4: Restart Your Server</h3>
+                        <p>Restart your server or use the <code>refresh</code> command followed by the resource name:</p>
                         
-                        <p>Configure telegraph office locations throughout your map:</p>
+                        <pre><code>refresh
+ensure noc_telegraph</code></pre>
                         
-                        <pre><code>Config.Offices = {
-    {
-        name = "Saint Denis Telegraph",
-        coords = vector3(2700.0, -1400.0, 50.0),
-        hours = { open = 6, close = 22 },
-        npc = {
-            model = "U_M_M_ValSheriff_01",
-            coords = vector4(2700.0, -1400.0, 50.0, 180.0)
-        }
-    },
-    {
-        name = "Blackwater Telegraph",
-        coords = vector3(-800.0, -1300.0, 40.0),
-        hours = { open = 7, close = 21 },
-        npc = {
-            model = "U_M_M_ValSheriff_01",
-            coords = vector4(-800.0, -1300.0, 40.0, 90.0)
-        }
-    }
+                        <h2 id="configuration">Configuration</h2>
+                        
+                        <p>The configuration is straightforward. Open the <code>config.lua</code> file to customize:</p>
+                        
+                        <h3>Framework Setting</h3>
+                        <p>Set the script to work with your chosen framework:</p>
+                        
+                        <pre><code>Config.Script = 'out'    -- Options: 'out' (outsider_policeman) or 'vorp' (vorp_police)</code></pre>
+                        
+                        <h3>Key Binding</h3>
+                        <p>Set the key used to open the telegraph board:</p>
+                        
+                        <pre><code>Config.Button = 0x156F7119    -- Backspace key hash</code></pre>
+                        
+                        <div class="info-box">
+                            <div class="info-box-title">💡 Finding Key Hashes</div>
+                            <p style="margin: 0;">You can find key hashes in the FiveM documentation or by using a key hash finder resource. Common keys include Backspace (<code>0x156F7119</code>), F5 (<code>0x8CC9CD42</code>), etc.</p>
+                        </div>
+                        
+                        <h3>Robbery Configuration</h3>
+                        <p>Define which robberies to display and their minimum police requirements:</p>
+                        
+                        <pre><code>Config.Robberies = {
+    { label = "General Stores",   minPolice = 1 },
+    { label = "Secondary Banks",  minPolice = 3 },
+    { label = "Full Price Drugs", minPolice = 4 },
+    { label = "Jewlery Store",    minPolice = 4 },
+    { label = "St. Denis Bank",   minPolice = 5 },
+    { label = "Blackwater Bank",  minPolice = 6 },
 }</code></pre>
                         
-                        <h3>Delivery Zones</h3>
-                        
-                        <p>Define regions for delivery time calculations:</p>
+                        <h3>Configuration Parameters</h3>
                         
                         <table>
                             <thead>
@@ -363,102 +354,83 @@ Config.DeliveryDelay = 300              -- Base delivery time in seconds</code><
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><code>name</code></td>
+                                    <td><code>label</code></td>
                                     <td>string</td>
-                                    <td>Zone identifier name</td>
+                                    <td>The display name shown on the telegraph board</td>
                                 </tr>
                                 <tr>
-                                    <td><code>center</code></td>
-                                    <td>vector3</td>
-                                    <td>Center coordinates of the zone</td>
-                                </tr>
-                                <tr>
-                                    <td><code>radius</code></td>
+                                    <td><code>minPolice</code></td>
                                     <td>number</td>
-                                    <td>Radius of the zone in meters</td>
-                                </tr>
-                                <tr>
-                                    <td><code>deliveryMultiplier</code></td>
-                                    <td>number</td>
-                                    <td>Time multiplier for deliveries to/from this zone</td>
+                                    <td>Minimum police required for this robbery to be available</td>
                                 </tr>
                             </tbody>
                         </table>
                         
                         <h2 id="usage">Usage</h2>
                         
-                        <h3>Sending a Telegram</h3>
-                        <p>Players can visit any telegraph office to send messages:</p>
-                        <ol>
-                            <li>Approach the telegraph clerk NPC</li>
-                            <li>Interact using the prompt (default: <code>E</code>)</li>
-                            <li>Select "Send Telegram" from the menu</li>
-                            <li>Enter the recipient's name and message</li>
-                            <li>Confirm the price and send</li>
-                        </ol>
-                        
-                        <h3>Receiving Telegrams</h3>
-                        <p>When a telegram arrives, the recipient will be notified:</p>
+                        <h3>Opening the Telegraph Board</h3>
+                        <p>Press and hold the configured key (default: Backspace) to display the telegraph board. The board shows:</p>
                         <ul>
-                            <li>A notification appears indicating a new telegram</li>
-                            <li>Visit any telegraph office to collect your messages</li>
-                            <li>Telegrams are stored until collected or expired</li>
+                            <li>A list of all configured robberies</li>
+                            <li>Whether each robbery is available (green checkmark) or unavailable (red X)</li>
+                            <li>Real-time updates based on police count</li>
                         </ul>
                         
-                        <h3>Telegram Storage</h3>
-                        <p>Sent and received telegrams are stored in the database:</p>
-                        <pre><code>-- Access your telegram history through the office menu
--- Administrators can view all telegrams through the admin panel</code></pre>
+                        <h3>How It Works</h3>
+                        <ol>
+                            <li>The script monitors police duty status in real-time</li>
+                            <li>When you press the key, it requests current police count from the server</li>
+                            <li>The server calculates availability for each robbery based on <code>minPolice</code></li>
+                            <li>The UI displays results with visual indicators</li>
+                        </ol>
                         
-                        <h2 id="api">API Reference</h2>
+                        <h3>Police Count Tracking</h3>
+                        <p>The script automatically tracks police officers:</p>
+                        <ul>
+                            <li><strong>Outsider Framework:</strong> Checks <code>Player(state).IsPolice</code> and <code>Player(state).IsOnDuty</code></li>
+                            <li><strong>VORP Framework:</strong> Checks <code>Player(state).isPoliceDuty</code></li>
+                        </ul>
                         
-                        <h3>Server Exports</h3>
+                        <h2 id="customization">Customization</h2>
                         
-                        <pre><code>-- Send a telegram programmatically
-exports.noc_telegraph:SendTelegram(sender, recipient, message, callback)
-
--- Get pending telegrams for a player
-local telegrams = exports.noc_telegraph:GetPendingTelegrams(playerId)
-
--- Check if player has unread telegrams
-local hasUnread = exports.noc_telegraph:HasUnreadTelegrams(playerId)
-
--- Mark telegram as read
-exports.noc_telegraph:MarkAsRead(telegramId)
-
--- Get telegram history
-local history = exports.noc_telegraph:GetHistory(playerId, limit)</code></pre>
+                        <h3>UI Styling</h3>
+                        <p>The telegraph board uses HTML/CSS/JS for its UI. You can customize the appearance by editing:</p>
                         
-                        <h3>Client Exports</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>File</th>
+                                    <th>Purpose</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>html/index.html</code></td>
+                                    <td>HTML structure of the board</td>
+                                </tr>
+                                <tr>
+                                    <td><code>html/style.css</code></td>
+                                    <td>Visual styling and colors</td>
+                                </tr>
+                                <tr>
+                                    <td><code>html/script.js</code></td>
+                                    <td>UI logic and animations</td>
+                                </tr>
+                            </tbody>
+                        </table>
                         
-                        <pre><code>-- Open the telegraph UI
-exports.noc_telegraph:OpenUI()
-
--- Close the telegraph UI
-exports.noc_telegraph:CloseUI()
-
--- Get nearby telegraph office
-local office = exports.noc_telegraph:GetNearbyOffice()
-
--- Check if player is at telegraph office
-local atOffice = exports.noc_telegraph:IsAtOffice()</code></pre>
-                        
-                        <h3>Events</h3>
-                        
-                        <p>The script fires the following events for integration:</p>
-                        
-                        <pre><code>-- Server Event: When a telegram is sent
-TriggerEvent('noc_telegraph:telegramSent', sender, recipient, messageData)
-
--- Server Event: When a telegram is delivered
-TriggerEvent('noc_telegraph:telegramDelivered', recipient, telegramId)
-
--- Client Event: When player receives notification
-TriggerClientEvent('noc_telegraph:notifyRecipient', playerId, telegramCount)</code></pre>
+                        <h3>Images</h3>
+                        <p>Replace images in <code>html/images/</code> to customize the look:</p>
+                        <ul>
+                            <li><code>check.png</code> - Available indicator</li>
+                            <li><code>x.png</code> - Unavailable indicator</li>
+                            <li><code>modern_bg.png</code> - Background texture</li>
+                            <li><code>line_item.png</code> - Row styling</li>
+                        </ul>
                         
                         <div class="info-box">
                             <div class="info-box-title">🔧 Need Help?</div>
-                            <p style="margin: 0;">Having trouble setting up <code>noc_telegraph</code>? Join our <a href="https://discord.gg/nightowlcodes">Discord</a> and open a support ticket. We'll get you sorted.</p>
+                            <p style="margin: 0;">Having trouble setting up <code>noc_telegraph</code>? Join our <a href="https://discord.gg/nKnN7YTXGv">Discord</a> and open a support ticket. We'll get you sorted.</p>
                         </div>
                         
                         <!-- Navigation Footer -->
@@ -473,10 +445,10 @@ TriggerClientEvent('noc_telegraph:notifyRecipient', playerId, telegramCount)</co
                                     <div class="nav-footer-title">Getting Started</div>
                                 </div>
                             </a>
-                            <a href="noc_bounty.html" class="nav-footer-item">
+                            <a href="noc_notify.html" class="nav-footer-item">
                                 <div>
                                     <div class="nav-footer-label">Next</div>
-                                    <div class="nav-footer-title">noc_bounty</div>
+                                    <div class="nav-footer-title">noc_notify</div>
                                 </div>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -494,7 +466,7 @@ TriggerClientEvent('noc_telegraph:notifyRecipient', playerId, telegramCount)</co
                         <li class="toc-item"><a href="#installation">Installation</a></li>
                         <li class="toc-item"><a href="#configuration">Configuration</a></li>
                         <li class="toc-item"><a href="#usage">Usage</a></li>
-                        <li class="toc-item"><a href="#api">API Reference</a></li>
+                        <li class="toc-item"><a href="#customization">Customization</a></li>
                     </ul>
                 </aside>
             </div>
@@ -504,7 +476,7 @@ TriggerClientEvent('noc_telegraph:notifyRecipient', playerId, telegramCount)</co
                 <span>&copy; 2024 Night Owl Codes. All rights reserved.</span>
                 <div class="footer-links">
                     <a href="https://nightowlcodes.com">Store</a>
-                    <a href="https://discord.gg/nightowlcodes">Discord</a>
+                    <a href="https://discord.gg/nKnN7YTXGv">Discord</a>
                     <a href="https://github.com/night-owl-codes">GitHub</a>
                 </div>
             </footer>
