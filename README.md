@@ -17,7 +17,7 @@ docs/
 ├── index.html              # Main landing/getting started page
 ├── scripts/
 │   ├── noc_telegraph.html  # Telegraph system documentation
-│   └── noc_bounty.html     # Bounty hunting system documentation
+│   └── noc_notify.html     # Notification system documentation
 ├── styles/
 │   └── main.css            # Main stylesheet with brand colors
 ├── scripts/
@@ -60,8 +60,8 @@ This documentation site follows the Night Owl Codes brand guidelines:
 
 ## 📚 Documented Scripts
 
-- **noc_telegraph** - A period-accurate telegraph system for RedM servers
-- **noc_bounty** - A comprehensive bounty hunting system
+- **noc_telegraph** - A police activity telegraph board showing robbery availability based on police count
+- **noc_notify** - A stylish, customizable notification system with western aesthetics
 
 ## 🛠️ Development
 
@@ -93,7 +93,7 @@ Found a typo or want to improve the documentation?
 Need help with our scripts? 
 
 - 🛒 **Store:** [nightowlcodes.com](https://nightowlcodes.com)
-- 💬 **Discord:** [discord.gg/nightowlcodes](https://discord.gg/nightowlcodes)
+- 💬 **Discord:** [discord.gg/nKnN7YTXGv](https://discord.gg/nKnN7YTXGv)
 - 🐙 **GitHub:** [github.com/night-owl-codes](https://github.com/night-owl-codes)
 
 ## 📜 License
