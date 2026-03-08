@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Night Owl Codes - Premium RedM script documentation and resources for server owners who care about quality.">
+    <meta name="theme-color" content="#140D07">
+    <title>Getting Started - Night Owl Codes Documentation</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="assets/images/logo-transparent.png">
+    <style>
+        /* Additional inline styles for search results dropdown */
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(26, 18, 9, 0.98);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+        
+        .search-results.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .search-result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--antique-parchment);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .search-result-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        .search-result-title {
+            font-weight: 500;
+        }
+        
+        .search-result-category {
+            font-size: 0.75rem;
+            color: var(--code-warden-bronze);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .search-result-empty {
+            padding: 1rem;
+            text-align: center;
+            color: var(--code-warden-bronze);
+        }
+        
+        /* Code copy button */
+        .code-copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 4px;
+            color: var(--code-warden-bronze);
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+        
+        pre:hover .code-copy-btn {
+            opacity: 1;
+        }
+        
+        .code-copy-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--classic-gold);
+        }
+        
+        .code-copy-btn.copied {
+            color: #4ade80;
+        }
+        
+        /* Mobile menu overlay */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+        
+        .sidebar-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Mobile menu toggle */
+        .mobile-menu-toggle {
+            display: none;
+            padding: 0.5rem;
+            background: none;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 4px;
+            color: var(--antique-parchment);
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: flex;
+            }
+        }
+        
+        body.sidebar-open {
+            overflow: hidden;
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <img src="assets/images/logo-transparent.png" alt="Night Owl Codes Logo">
+                <span class="logo-text">Night Owl Codes</span>
+            </div>
+            
+            <nav class="nav-section">
+                <div class="nav-section-title">Navigation</div>
+                <a href="index.html" class="nav-item active">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <span>Documentation</span>
+                </a>
+                <a href="https://nightowlcodes.com" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span>Store</span>
+                </a>
+                <a href="https://discord.gg/nightowlcodes" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                    </svg>
+                    <span>Discord</span>
+                </a>
+            </nav>
+            
+            <nav class="nav-section">
+                <div class="nav-section-title">Scripts</div>
+                <a href="index.html" class="nav-item active">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                    <span>Getting Started</span>
+                </a>
+                <a href="scripts/noc_telegraph.html" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                    </svg>
+                    <span>noc_telegraph</span>
+                </a>
+                <a href="scripts/noc_bounty.html" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="8" r="7"></circle>
+                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                    </svg>
+                    <span>noc_bounty</span>
+                </a>
+            </nav>
+            
+            <nav class="nav-section">
+                <div class="nav-section-title">Resources</div>
+                <a href="#installation" class="nav-item children">
+                    <span>Installation Guide</span>
+                </a>
+                <a href="#configuration" class="nav-item children">
+                    <span>Configuration</span>
+                </a>
+                <a href="#api" class="nav-item children">
+                    <span>API Reference</span>
+                </a>
+            </nav>
+            
+            <nav class="nav-section">
+                <div class="nav-section-title">Help</div>
+                <a href="#troubleshooting" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span>Troubleshooting</span>
+                </a>
+                <a href="#faq" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span>FAQ</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="sidebar-overlay"></div>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="mobile-menu-toggle">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div class="search-container">
+                        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" class="search-input" placeholder="Search documentation... (⌘K)">
+                        <div class="search-results"></div>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <a href="https://github.com/night-owl-codes" class="header-link">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        <span>GitHub</span>
+                    </a>
+                    <a href="https://discord.gg/nightowlcodes" class="header-link">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                        </svg>
+                        <span>Discord</span>
+                    </a>
+                </div>
+            </header>
+            
+            <!-- Content Wrapper -->
+            <div class="content-wrapper">
+                <!-- Main Content Area -->
+                <div class="content-area">
+                    <article class="article">
+                        <div class="article-header">
+                            <nav class="breadcrumbs">
+                                <a href="index.html">Docs</a>
+                                <span class="breadcrumb-separator">/</span>
+                                <span>Getting Started</span>
+                            </nav>
+                            <h1>Getting Started</h1>
+                            <p style="font-size: 1.1rem; opacity: 0.8; margin-top: 1rem;">Welcome to Night Owl Codes documentation. Here you'll find everything you need to install, configure, and customize our RedM scripts for your server.</p>
+                        </div>
+                        
+                        <p>At Night Owl Codes, we build immersive, period-accurate, and highly optimized resources for RedM server owners who care about quality. This documentation will guide you through the installation process, configuration options, and advanced features of our scripts.</p>
+                        
+                        <div class="info-box">
+                            <div class="info-box-title">💡 New to Night Owl Codes?</div>
+                            <p style="margin: 0;">If you're setting up our scripts for the first time, we recommend following the installation guide below. If you hit a snag, open a ticket on our Discord and we'll help you out.</p>
+                        </div>
+                        
+                        <h2 id="installation">Installation</h2>
+                        
+                        <p>Installing Night Owl Codes scripts is straightforward. Follow these steps to get up and running:</p>
+                        
+                        <h3>Prerequisites</h3>
+                        <p>Before you begin, make sure you have the following:</p>
+                        <ul>
+                            <li>A RedM server running on the latest version</li>
+                            <li>Access to your server's resources folder</li>
+                            <li>Basic knowledge of server.cfg configuration</li>
+                        </ul>
+                        
+                        <h3>Step 1: Download the Script</h3>
+                        <p>Download your purchased script from our <a href="https://nightowlcodes.com">store</a>. The download will be a ZIP file containing all necessary resources.</p>
+                        
+                        <h3>Step 2: Extract to Resources</h3>
+                        <p>Extract the downloaded ZIP file to your server's <code>resources</code> folder. Each script uses the <code>noc_</code> prefix for easy identification:</p>
+                        
+                        <pre><code>resources/
+├── [noc]/
+│   ├── noc_telegraph/
+│   ├── noc_bounty/
+│   └── ...</code></pre>
+                        
+                        <h3>Step 3: Add to server.cfg</h3>
+                        <p>Add the script to your <code>server.cfg</code> file. Make sure to place it after any framework resources:</p>
+                        
+                        <pre><code>ensure noc_telegraph
+ensure noc_bounty</code></pre>
+                        
+                        <div class="info-box warning">
+                            <div class="info-box-title">⚠️ Important</div>
+                            <p style="margin: 0;">All Night Owl Codes scripts use the <code>noc_</code> prefix. If you're having issues, double-check that the resource name matches exactly in your server.cfg.</p>
+                        </div>
+                        
+                        <h3>Step 4: Configure the Script</h3>
+                        <p>Each script comes with a configuration file located in the <code>config</code> folder. Open the <code>config.lua</code> file to customize the script to your needs:</p>
+                        
+                        <pre><code>-- config.lua
+Config = {}
+
+-- General Settings
+Config.Debug = false
+Config.Locale = 'en'
+
+-- Feature toggles
+Config.EnableLogging = true</code></pre>
+                        
+                        <h3>Step 5: Restart Your Server</h3>
+                        <p>Restart your server or use the <code>refresh</code> command followed by the resource name to load the new script:</p>
+                        
+                        <pre><code>refresh
+ensure noc_telegraph</code></pre>
+                        
+                        <h2 id="configuration">Configuration</h2>
+                        
+                        <p>Each Night Owl Codes script comes with extensive configuration options. The configuration files are heavily commented to help you understand each setting.</p>
+                        
+                        <h3>Configuration Structure</h3>
+                        <p>The typical configuration file structure is as follows:</p>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>File</th>
+                                    <th>Purpose</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>config.lua</code></td>
+                                    <td>Main configuration settings</td>
+                                </tr>
+                                <tr>
+                                    <td><code>locales/*.lua</code></td>
+                                    <td>Language/translation files</td>
+                                </tr>
+                                <tr>
+                                    <td><code>items.lua</code></td>
+                                    <td>Item definitions (if applicable)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h3>Best Practices</h3>
+                        <ul>
+                            <li>Always back up your configuration files before making changes</li>
+                            <li>Use the provided default values as a starting point</li>
+                            <li>Test changes in a development environment first</li>
+                            <li>Keep your configuration files organized and well-commented</li>
+                        </ul>
+                        
+                        <h2 id="api">API Reference</h2>
+                        
+                        <p>Night Owl Codes scripts expose various API endpoints for integration with other resources. Here's a quick overview of the available exports:</p>
+                        
+                        <h3>Server Exports</h3>
+                        <pre><code>-- Example: Check if player has a specific condition
+exports.noc_telegraph:HasCondition(playerId, conditionName)
+
+-- Example: Trigger a custom event
+exports.noc_telegraph:TriggerEvent(playerId, eventData)</code></pre>
+                        
+                        <h3>Client Exports</h3>
+                        <pre><code>-- Example: Get current player status
+local status = exports.noc_telegraph:GetStatus()
+
+-- Example: Open UI
+exports.noc_telegraph:OpenUI()</code></pre>
+                        
+                        <p>For detailed API documentation for each script, check the individual script pages in the sidebar.</p>
+                        
+                        <h2 id="troubleshooting">Troubleshooting</h2>
+                        
+                        <p>Running into issues? Here are some common problems and their solutions:</p>
+                        
+                        <h3>Script Not Loading</h3>
+                        <p>If the script isn't loading, check the following:</p>
+                        <ul>
+                            <li>Verify the resource name in <code>server.cfg</code> matches the folder name exactly</li>
+                            <li>Check your server console for error messages</li>
+                            <li>Ensure all dependencies are installed and loaded before the script</li>
+                        </ul>
+                        
+                        <h3>Database Errors</h3>
+                        <p>If you're seeing database-related errors:</p>
+                        <ul>
+                            <li>Verify your database connection settings</li>
+                            <li>Run any provided SQL migration files</li>
+                            <li>Check that required tables exist</li>
+                        </ul>
+                        
+                        <h3>Performance Issues</h3>
+                        <p>If you experience performance problems:</p>
+                        <ul>
+                            <li>Enable the debug mode to identify slow operations</li>
+                            <li>Review your configuration for resource-intensive settings</li>
+                            <li>Consider reducing update frequencies in the config</li>
+                        </ul>
+                        
+                        <div class="info-box">
+                            <div class="info-box-title">Need More Help?</div>
+                            <p style="margin: 0;">If you're still having trouble, join our <a href="https://discord.gg/nightowlcodes">Discord</a> and open a support ticket. We're here to help.</p>
+                        </div>
+                        
+                        <h2 id="faq">Frequently Asked Questions</h2>
+                        
+                        <h3>What frameworks do you support?</h3>
+                        <p>Our scripts are designed to work with popular RedM frameworks. Check individual script documentation for specific compatibility information.</p>
+                        
+                        <h3>Can I modify the scripts?</h3>
+                        <p>Yes, you can modify the scripts for your own server. However, we recommend keeping the original files as a backup and documenting your changes for future updates.</p>
+                        
+                        <h3>How do I get updates?</h3>
+                        <p>Updates are delivered through our Discord. You'll receive notifications when new versions are available, and you can download them from the store using your purchase link.</p>
+                        
+                        <h3>Do you offer refunds?</h3>
+                        <p>Due to the digital nature of our products, we generally don't offer refunds. However, if you're experiencing technical issues, we'll work with you to resolve them through our support channels.</p>
+                        
+                        <!-- Navigation Footer -->
+                        <div class="nav-footer">
+                            <a href="https://nightowlcodes.com" class="nav-footer-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <div>
+                                    <div class="nav-footer-label">Previous</div>
+                                    <div class="nav-footer-title">Visit Store</div>
+                                </div>
+                            </a>
+                            <a href="scripts/noc_telegraph.html" class="nav-footer-item">
+                                <div>
+                                    <div class="nav-footer-label">Next</div>
+                                    <div class="nav-footer-title">noc_telegraph</div>
+                                </div>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+                
+                <!-- Table of Contents Sidebar -->
+                <aside class="toc-sidebar">
+                    <div class="toc-title">On this page</div>
+                    <ul class="toc-list">
+                        <li class="toc-item"><a href="#installation">Installation</a></li>
+                        <li class="toc-item"><a href="#configuration">Configuration</a></li>
+                        <li class="toc-item"><a href="#api">API Reference</a></li>
+                        <li class="toc-item"><a href="#troubleshooting">Troubleshooting</a></li>
+                        <li class="toc-item"><a href="#faq">FAQ</a></li>
+                    </ul>
+                </aside>
+            </div>
+            
+            <!-- Footer -->
+            <footer class="footer">
+                <span>&copy; 2024 Night Owl Codes. All rights reserved.</span>
+                <div class="footer-links">
+                    <a href="https://nightowlcodes.com">Store</a>
+                    <a href="https://discord.gg/nightowlcodes">Discord</a>
+                    <a href="https://github.com/night-owl-codes">GitHub</a>
+                </div>
+            </footer>
+        </main>
+    </div>
+    
+    <script src="scripts/main.js"></script>
+</body>
+</html>

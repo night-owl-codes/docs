@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="noc_telegraph - A period-accurate telegraph system for RedM servers by Night Owl Codes.">
+    <meta name="theme-color" content="#140D07">
+    <title>noc_telegraph - Night Owl Codes Documentation</title>
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo-transparent.png">
+    <style>
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(26, 18, 9, 0.98);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+        
+        .search-results.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .search-result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--antique-parchment);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .search-result-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        .search-result-title {
+            font-weight: 500;
+        }
+        
+        .search-result-category {
+            font-size: 0.75rem;
+            color: var(--code-warden-bronze);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .search-result-empty {
+            padding: 1rem;
+            text-align: center;
+            color: var(--code-warden-bronze);
+        }
+        
+        .code-copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 4px;
+            color: var(--code-warden-bronze);
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+        
+        pre:hover .code-copy-btn {
+            opacity: 1;
+        }
+        
+        .code-copy-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--classic-gold);
+        }
+        
+        .code-copy-btn.copied {
+            color: #4ade80;
+        }
+        
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+        
+        .sidebar-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            padding: 0.5rem;
+            background: none;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 4px;
+            color: var(--antique-parchment);
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: flex;
+            }
+        }
+        
+        body.sidebar-open {
+            overflow: hidden;
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <img src="../assets/images/logo-transparent.png" alt="Night Owl Codes Logo">
+                <span class="logo-text">Night Owl Codes</span>
+            </div>
+            
+            <nav class="nav-section">
+                <div class="nav-section-title">Navigation</div>
+                <a href="../index.html" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <span>Documentation</span>
+                </a>
+                <a href="https://nightowlcodes.com" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span>Store</span>
+                </a>
+                <a href="https://discord.gg/nightowlcodes" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                    </svg>
+                    <span>Discord</span>
+                </a>
+            </nav>
+            
+            <nav class="nav-section">
+                <div class="nav-section-title">Scripts</div>
+                <a href="../index.html" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                    <span>Getting Started</span>
+                </a>
+                <a href="noc_telegraph.html" class="nav-item active">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                    </svg>
+                    <span>noc_telegraph</span>
+                </a>
+                <a href="noc_bounty.html" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="8" r="7"></circle>
+                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                    </svg>
+                    <span>noc_bounty</span>
+                </a>
+            </nav>
+            
+            <nav class="nav-section">
+                <div class="nav-section-title">noc_telegraph</div>
+                <a href="#installation" class="nav-item children">
+                    <span>Installation</span>
+                </a>
+                <a href="#configuration" class="nav-item children">
+                    <span>Configuration</span>
+                </a>
+                <a href="#usage" class="nav-item children">
+                    <span>Usage</span>
+                </a>
+                <a href="#api" class="nav-item children">
+                    <span>API Reference</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="sidebar-overlay"></div>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="mobile-menu-toggle">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div class="search-container">
+                        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" class="search-input" placeholder="Search documentation... (⌘K)">
+                        <div class="search-results"></div>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <a href="https://github.com/night-owl-codes" class="header-link">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        <span>GitHub</span>
+                    </a>
+                    <a href="https://discord.gg/nightowlcodes" class="header-link">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                        </svg>
+                        <span>Discord</span>
+                    </a>
+                </div>
+            </header>
+            
+            <!-- Content Wrapper -->
+            <div class="content-wrapper">
+                <!-- Main Content Area -->
+                <div class="content-area">
+                    <article class="article">
+                        <div class="article-header">
+                            <nav class="breadcrumbs">
+                                <a href="../index.html">Docs</a>
+                                <span class="breadcrumb-separator">/</span>
+                                <a href="../index.html">Scripts</a>
+                                <span class="breadcrumb-separator">/</span>
+                                <span>noc_telegraph</span>
+                            </nav>
+                            <h1>noc_telegraph</h1>
+                            <p style="font-size: 1.1rem; opacity: 0.8; margin-top: 1rem;">A period-accurate telegraph system for immersive long-distance communication in your RedM server.</p>
+                        </div>
+                        
+                        <p>The <code>noc_telegraph</code> script brings authentic 1899-era communication to your RedM server. Players can send and receive telegrams through telegraph offices, creating immersive roleplay opportunities for businesses, law enforcement, and personal correspondence.</p>
+                        
+                        <div class="info-box">
+                            <div class="info-box-title">✨ Key Features</div>
+                            <ul style="margin: 0.5rem 0 0 1rem;">
+                                <li>Period-accurate telegraph system with Morse code aesthetics</li>
+                                <li>Multiple telegraph office locations</li>
+                                <li>Message delivery delays based on distance</li>
+                                <li>Telegram logging for server administrators</li>
+                                <li>Customizable pricing and delivery times</li>
+                            </ul>
+                        </div>
+                        
+                        <h2 id="installation">Installation</h2>
+                        
+                        <h3>Step 1: Download and Extract</h3>
+                        <p>Download <code>noc_telegraph</code> from our store and extract it to your resources folder:</p>
+                        
+                        <pre><code>resources/
+└── [noc]/
+    └── noc_telegraph/</code></pre>
+                        
+                        <h3>Step 2: Add to server.cfg</h3>
+                        <p>Add the following to your <code>server.cfg</code>:</p>
+                        
+                        <pre><code>ensure noc_telegraph</code></pre>
+                        
+                        <h3>Step 3: Run Database Migration</h3>
+                        <p>Execute the provided SQL file to create the necessary database tables:</p>
+                        
+                        <pre><code>-- The migration runs automatically on first start
+-- Or manually import: noc_telegraph/sql/migration.sql</code></pre>
+                        
+                        <h3>Step 4: Configure</h3>
+                        <p>Open <code>noc_telegraph/config/config.lua</code> to customize the script settings.</p>
+                        
+                        <h2 id="configuration">Configuration</h2>
+                        
+                        <p>The configuration file is organized into several sections for easy customization:</p>
+                        
+                        <h3>General Settings</h3>
+                        
+                        <pre><code>Config = {}
+
+-- General Settings
+Config.Debug = false                    -- Enable debug mode for development
+Config.Locale = 'en'                    -- Language code (en, es, de, fr)
+Config.CurrencySymbol = '$'             -- Currency display symbol
+
+-- Telegram Settings
+Config.BasePrice = 5                    -- Base price per telegram
+Config.PricePerWord = 0.10              -- Additional cost per word
+Config.MaxMessageLength = 500           -- Maximum character limit
+Config.DeliveryDelay = 300              -- Base delivery time in seconds</code></pre>
+                        
+                        <h3>Office Locations</h3>
+                        
+                        <p>Configure telegraph office locations throughout your map:</p>
+                        
+                        <pre><code>Config.Offices = {
+    {
+        name = "Saint Denis Telegraph",
+        coords = vector3(2700.0, -1400.0, 50.0),
+        hours = { open = 6, close = 22 },
+        npc = {
+            model = "U_M_M_ValSheriff_01",
+            coords = vector4(2700.0, -1400.0, 50.0, 180.0)
+        }
+    },
+    {
+        name = "Blackwater Telegraph",
+        coords = vector3(-800.0, -1300.0, 40.0),
+        hours = { open = 7, close = 21 },
+        npc = {
+            model = "U_M_M_ValSheriff_01",
+            coords = vector4(-800.0, -1300.0, 40.0, 90.0)
+        }
+    }
+}</code></pre>
+                        
+                        <h3>Delivery Zones</h3>
+                        
+                        <p>Define regions for delivery time calculations:</p>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>name</code></td>
+                                    <td>string</td>
+                                    <td>Zone identifier name</td>
+                                </tr>
+                                <tr>
+                                    <td><code>center</code></td>
+                                    <td>vector3</td>
+                                    <td>Center coordinates of the zone</td>
+                                </tr>
+                                <tr>
+                                    <td><code>radius</code></td>
+                                    <td>number</td>
+                                    <td>Radius of the zone in meters</td>
+                                </tr>
+                                <tr>
+                                    <td><code>deliveryMultiplier</code></td>
+                                    <td>number</td>
+                                    <td>Time multiplier for deliveries to/from this zone</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h2 id="usage">Usage</h2>
+                        
+                        <h3>Sending a Telegram</h3>
+                        <p>Players can visit any telegraph office to send messages:</p>
+                        <ol>
+                            <li>Approach the telegraph clerk NPC</li>
+                            <li>Interact using the prompt (default: <code>E</code>)</li>
+                            <li>Select "Send Telegram" from the menu</li>
+                            <li>Enter the recipient's name and message</li>
+                            <li>Confirm the price and send</li>
+                        </ol>
+                        
+                        <h3>Receiving Telegrams</h3>
+                        <p>When a telegram arrives, the recipient will be notified:</p>
+                        <ul>
+                            <li>A notification appears indicating a new telegram</li>
+                            <li>Visit any telegraph office to collect your messages</li>
+                            <li>Telegrams are stored until collected or expired</li>
+                        </ul>
+                        
+                        <h3>Telegram Storage</h3>
+                        <p>Sent and received telegrams are stored in the database:</p>
+                        <pre><code>-- Access your telegram history through the office menu
+-- Administrators can view all telegrams through the admin panel</code></pre>
+                        
+                        <h2 id="api">API Reference</h2>
+                        
+                        <h3>Server Exports</h3>
+                        
+                        <pre><code>-- Send a telegram programmatically
+exports.noc_telegraph:SendTelegram(sender, recipient, message, callback)
+
+-- Get pending telegrams for a player
+local telegrams = exports.noc_telegraph:GetPendingTelegrams(playerId)
+
+-- Check if player has unread telegrams
+local hasUnread = exports.noc_telegraph:HasUnreadTelegrams(playerId)
+
+-- Mark telegram as read
+exports.noc_telegraph:MarkAsRead(telegramId)
+
+-- Get telegram history
+local history = exports.noc_telegraph:GetHistory(playerId, limit)</code></pre>
+                        
+                        <h3>Client Exports</h3>
+                        
+                        <pre><code>-- Open the telegraph UI
+exports.noc_telegraph:OpenUI()
+
+-- Close the telegraph UI
+exports.noc_telegraph:CloseUI()
+
+-- Get nearby telegraph office
+local office = exports.noc_telegraph:GetNearbyOffice()
+
+-- Check if player is at telegraph office
+local atOffice = exports.noc_telegraph:IsAtOffice()</code></pre>
+                        
+                        <h3>Events</h3>
+                        
+                        <p>The script fires the following events for integration:</p>
+                        
+                        <pre><code>-- Server Event: When a telegram is sent
+TriggerEvent('noc_telegraph:telegramSent', sender, recipient, messageData)
+
+-- Server Event: When a telegram is delivered
+TriggerEvent('noc_telegraph:telegramDelivered', recipient, telegramId)
+
+-- Client Event: When player receives notification
+TriggerClientEvent('noc_telegraph:notifyRecipient', playerId, telegramCount)</code></pre>
+                        
+                        <div class="info-box">
+                            <div class="info-box-title">🔧 Need Help?</div>
+                            <p style="margin: 0;">Having trouble setting up <code>noc_telegraph</code>? Join our <a href="https://discord.gg/nightowlcodes">Discord</a> and open a support ticket. We'll get you sorted.</p>
+                        </div>
+                        
+                        <!-- Navigation Footer -->
+                        <div class="nav-footer">
+                            <a href="../index.html" class="nav-footer-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <div>
+                                    <div class="nav-footer-label">Previous</div>
+                                    <div class="nav-footer-title">Getting Started</div>
+                                </div>
+                            </a>
+                            <a href="noc_bounty.html" class="nav-footer-item">
+                                <div>
+                                    <div class="nav-footer-label">Next</div>
+                                    <div class="nav-footer-title">noc_bounty</div>
+                                </div>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+                
+                <!-- Table of Contents Sidebar -->
+                <aside class="toc-sidebar">
+                    <div class="toc-title">On this page</div>
+                    <ul class="toc-list">
+                        <li class="toc-item"><a href="#installation">Installation</a></li>
+                        <li class="toc-item"><a href="#configuration">Configuration</a></li>
+                        <li class="toc-item"><a href="#usage">Usage</a></li>
+                        <li class="toc-item"><a href="#api">API Reference</a></li>
+                    </ul>
+                </aside>
+            </div>
+            
+            <!-- Footer -->
+            <footer class="footer">
+                <span>&copy; 2024 Night Owl Codes. All rights reserved.</span>
+                <div class="footer-links">
+                    <a href="https://nightowlcodes.com">Store</a>
+                    <a href="https://discord.gg/nightowlcodes">Discord</a>
+                    <a href="https://github.com/night-owl-codes">GitHub</a>
+                </div>
+            </footer>
+        </main>
+    </div>
+    
+    <script src="../scripts/main.js"></script>
+</body>
+</html>

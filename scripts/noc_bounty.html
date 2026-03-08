@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="noc_bounty - A comprehensive bounty hunting system for RedM servers by Night Owl Codes.">
+    <meta name="theme-color" content="#140D07">
+    <title>noc_bounty - Night Owl Codes Documentation</title>
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo-transparent.png">
+    <style>
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(26, 18, 9, 0.98);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+        
+        .search-results.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .search-result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--antique-parchment);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .search-result-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        .search-result-title {
+            font-weight: 500;
+        }
+        
+        .search-result-category {
+            font-size: 0.75rem;
+            color: var(--code-warden-bronze);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .search-result-empty {
+            padding: 1rem;
+            text-align: center;
+            color: var(--code-warden-bronze);
+        }
+        
+        .code-copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 4px;
+            color: var(--code-warden-bronze);
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+        
+        pre:hover .code-copy-btn {
+            opacity: 1;
+        }
+        
+        .code-copy-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--classic-gold);
+        }
+        
+        .code-copy-btn.copied {
+            color: #4ade80;
+        }
+        
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+        
+        .sidebar-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            padding: 0.5rem;
+            background: none;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 4px;
+            color: var(--antique-parchment);
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: flex;
+            }
+        }
+        
+        body.sidebar-open {
+            overflow: hidden;
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <img src="../assets/images/logo-transparent.png" alt="Night Owl Codes Logo">
+                <span class="logo-text">Night Owl Codes</span>
+            </div>
+            
+            <nav class="nav-section">
+                <div class="nav-section-title">Navigation</div>
+                <a href="../index.html" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <span>Documentation</span>
+                </a>
+                <a href="https://nightowlcodes.com" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span>Store</span>
+                </a>
+                <a href="https://discord.gg/nightowlcodes" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                    </svg>
+                    <span>Discord</span>
+                </a>
+            </nav>
+            
+            <nav class="nav-section">
+                <div class="nav-section-title">Scripts</div>
+                <a href="../index.html" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                    <span>Getting Started</span>
+                </a>
+                <a href="noc_telegraph.html" class="nav-item">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                    </svg>
+                    <span>noc_telegraph</span>
+                </a>
+                <a href="noc_bounty.html" class="nav-item active">
+                    <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="8" r="7"></circle>
+                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                    </svg>
+                    <span>noc_bounty</span>
+                </a>
+            </nav>
+            
+            <nav class="nav-section">
+                <div class="nav-section-title">noc_bounty</div>
+                <a href="#installation" class="nav-item children">
+                    <span>Installation</span>
+                </a>
+                <a href="#configuration" class="nav-item children">
+                    <span>Configuration</span>
+                </a>
+                <a href="#bounty-types" class="nav-item children">
+                    <span>Bounty Types</span>
+                </a>
+                <a href="#tracking" class="nav-item children">
+                    <span>Tracking System</span>
+                </a>
+                <a href="#api" class="nav-item children">
+                    <span>API Reference</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="sidebar-overlay"></div>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="mobile-menu-toggle">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div class="search-container">
+                        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" class="search-input" placeholder="Search documentation... (⌘K)">
+                        <div class="search-results"></div>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <a href="https://github.com/night-owl-codes" class="header-link">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        <span>GitHub</span>
+                    </a>
+                    <a href="https://discord.gg/nightowlcodes" class="header-link">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                        </svg>
+                        <span>Discord</span>
+                    </a>
+                </div>
+            </header>
+            
+            <!-- Content Wrapper -->
+            <div class="content-wrapper">
+                <!-- Main Content Area -->
+                <div class="content-area">
+                    <article class="article">
+                        <div class="article-header">
+                            <nav class="breadcrumbs">
+                                <a href="../index.html">Docs</a>
+                                <span class="breadcrumb-separator">/</span>
+                                <a href="../index.html">Scripts</a>
+                                <span class="breadcrumb-separator">/</span>
+                                <span>noc_bounty</span>
+                            </nav>
+                            <h1>noc_bounty</h1>
+                            <p style="font-size: 1.1rem; opacity: 0.8; margin-top: 1rem;">A comprehensive bounty hunting system that brings the lawless frontier to life with dynamic wanted posters, tracking mechanics, and immersive rewards.</p>
+                        </div>
+                        
+                        <p>The <code>noc_bounty</code> script delivers an authentic bounty hunting experience for your RedM server. Players can track down wanted criminals, collect rewards, and build their reputation as legendary bounty hunters or notorious outlaws.</p>
+                        
+                        <div class="info-box">
+                            <div class="info-box-title">✨ Key Features</div>
+                            <ul style="margin: 0.5rem 0 0 1rem;">
+                                <li>Dynamic bounty board with wanted posters</li>
+                                <li>Multiple bounty tiers (Minor, Major, Legendary)</li>
+                                <li>Realistic tracking and investigation mechanics</li>
+                                <li>Bounty hunter license system</li>
+                                <li>Reputation and reward scaling</li>
+                                <li>Dead or Alive capture options</li>
+                            </ul>
+                        </div>
+                        
+                        <h2 id="installation">Installation</h2>
+                        
+                        <h3>Step 1: Download and Extract</h3>
+                        <p>Download <code>noc_bounty</code> from our store and extract it to your resources folder:</p>
+                        
+                        <pre><code>resources/
+└── [noc]/
+    └── noc_bounty/</code></pre>
+                        
+                        <h3>Step 2: Add to server.cfg</h3>
+                        <p>Add the following to your <code>server.cfg</code>. Note that <code>noc_bounty</code> should be loaded after any framework resources:</p>
+                        
+                        <pre><code>ensure noc_bounty</code></pre>
+                        
+                        <h3>Step 3: Database Setup</h3>
+                        <p>The script automatically creates necessary tables on first start. Alternatively, you can manually run the SQL migration:</p>
+                        
+                        <pre><code>-- Located at: noc_bounty/sql/migration.sql
+-- Creates tables: noc_bounties, noc_hunter_stats, noc_bounty_claims</code></pre>
+                        
+                        <h3>Step 4: Configure</h3>
+                        <p>Open <code>noc_bounty/config/config.lua</code> to customize bounty settings, rewards, and tracking mechanics.</p>
+                        
+                        <h2 id="configuration">Configuration</h2>
+                        
+                        <h3>General Settings</h3>
+                        
+                        <pre><code>Config = {}
+
+-- General Settings
+Config.Debug = false                    -- Enable debug mode
+Config.Locale = 'en'                    -- Language code
+Config.RequireLicense = true            -- Require bounty hunter license
+
+-- Bounty Board Locations
+Config.Boards = {
+    { coords = vector3(-275.0, 805.0, 120.0), type = 'sheriff' },
+    { coords = vector3(2550.0, -1150.0, 55.0), type = 'post_office' },
+}
+
+-- Bounty Tiers
+Config.Tiers = {
+    minor = {
+        minReward = 25,
+        maxReward = 75,
+        difficulty = 1,
+        trackingRadius = 500.0
+    },
+    major = {
+        minReward = 100,
+        maxReward = 250,
+        difficulty = 2,
+        trackingRadius = 300.0
+    },
+    legendary = {
+        minReward = 500,
+        maxReward = 1000,
+        difficulty = 3,
+        trackingRadius = 150.0
+    }
+}</code></pre>
+                        
+                        <h3>Tracking Settings</h3>
+                        
+                        <p>Configure how bounty tracking works:</p>
+                        
+                        <pre><code>Config.Tracking = {
+    UpdateInterval = 30,                -- Seconds between position updates
+    MaxClues = 5,                       -- Maximum clues before target reveal
+    ClueRadius = 200.0,                 -- Search radius for clues
+    FadeTime = 60,                      -- Seconds before trail fades
+    RequireItems = true,                -- Require tracking items (map, binoculars)
+}
+
+Config.TrackingItems = {
+    { name = 'map', required = true },
+    { name = 'binoculars', required = false, bonus = true }
+}</code></pre>
+                        
+                        <h3>Dead or Alive Settings</h3>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>AllowDeadCapture</code></td>
+                                    <td>boolean</td>
+                                    <td><code>true</code></td>
+                                    <td>Allow bringing in bounties dead</td>
+                                </tr>
+                                <tr>
+                                    <td><code>DeadRewardMultiplier</code></td>
+                                    <td>number</td>
+                                    <td><code>0.5</code></td>
+                                    <td>Multiplier for dead bounties</td>
+                                </tr>
+                                <tr>
+                                    <td><code>AliveBonusMultiplier</code></td>
+                                    <td>number</td>
+                                    <td><code>1.25</code></td>
+                                    <td>Bonus for alive captures</td>
+                                </tr>
+                                <tr>
+                                    <td><code>ReputationGain</code></td>
+                                    <td>number</td>
+                                    <td><code>10</code></td>
+                                    <td>Base reputation per bounty</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h2 id="bounty-types">Bounty Types</h2>
+                        
+                        <h3>Minor Bounties</h3>
+                        <p>Low-level criminals with moderate rewards. Perfect for new bounty hunters:</p>
+                        <ul>
+                            <li>Simple tracking requirements</li>
+                            <li>Larger search radius</li>
+                            <li>Lower risk encounters</li>
+                            <li>Rewards: $25 - $75</li>
+                        </ul>
+                        
+                        <h3>Major Bounties</h3>
+                        <p>Dangerous criminals requiring skill and preparation:</p>
+                        <ul>
+                            <li>More complex tracking</li>
+                            <li>Targets may have allies</li>
+                            <li>Better equipment recommended</li>
+                            <li>Rewards: $100 - $250</li>
+                        </ul>
+                        
+                        <h3>Legendary Bounties</h3>
+                        <p>The most notorious outlaws on the frontier:</p>
+                        <ul>
+                            <li>Extremely difficult to track</li>
+                            <li>Highly dangerous targets</li>
+                            <li>May require a posse</li>
+                            <li>Rewards: $500 - $1000+</li>
+                        </ul>
+                        
+                        <div class="info-box warning">
+                            <div class="info-box-title">⚠️ Warning</div>
+                            <p style="margin: 0;">Legendary bounties are designed for experienced hunters. Make sure you're well-armed and consider bringing backup.</p>
+                        </div>
+                        
+                        <h2 id="tracking">Tracking System</h2>
+                        
+                        <p>The tracking system uses a clue-based investigation approach:</p>
+                        
+                        <h3>Investigation Phase</h3>
+                        <ol>
+                            <li>Accept bounty from the board</li>
+                            <li>Travel to the last known location</li>
+                            <li>Search the area for clues (footprints, witnesses, etc.)</li>
+                            <li>Each clue narrows down the target's location</li>
+                            <li>After enough clues, the target is revealed on your map</li>
+                        </ol>
+                        
+                        <h3>Clue Types</h3>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Clue Type</th>
+                                    <th>Description</th>
+                                    <th>Information Revealed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Footprints</td>
+                                    <td>Trail left by the target</td>
+                                    <td>Direction of travel</td>
+                                </tr>
+                                <tr>
+                                    <td>Witness</td>
+                                    <td>NPC who saw the target</td>
+                                    <td>Last known location</td>
+                                </tr>
+                                <tr>
+                                    <td>Camp Site</td>
+                                    <td>Recent camp location</td>
+                                    <td>Time since departure</td>
+                                </tr>
+                                <tr>
+                                    <td>Drop Point</td>
+                                    <td>Hidden stash</td>
+                                    <td>Target's plans</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h3>Tracking Tips</h3>
+                        <ul>
+                            <li>Bring a map and binoculars for bonus tracking abilities</li>
+                            <li>Check with locals - they might have seen something</li>
+                            <li>Time matters - trails go cold after a while</li>
+                            <li>Weather affects tracking (rain washes away footprints)</li>
+                        </ul>
+                        
+                        <h2 id="api">API Reference</h2>
+                        
+                        <h3>Server Exports</h3>
+                        
+                        <pre><code>-- Create a new bounty
+exports.noc_bounty:CreateBounty(targetId, tier, reason, reward, callback)
+
+-- Get all active bounties
+local bounties = exports.noc_bounty:GetActiveBounties()
+
+-- Get bounty by target ID
+local bounty = exports.noc_bounty:GetBountyByTarget(playerId)
+
+-- Claim a bounty (called when hunter captures target)
+exports.noc_bounty:ClaimBounty(hunterId, targetId, isAlive, callback)
+
+-- Get hunter stats
+local stats = exports.noc_bounty:GetHunterStats(playerId)
+
+-- Check if player has bounty hunter license
+local hasLicense = exports.noc_bounty:HasLicense(playerId)</code></pre>
+                        
+                        <h3>Client Exports</h3>
+                        
+                        <pre><code>-- Open bounty board UI
+exports.noc_bounty:OpenBountyBoard()
+
+-- Get current tracking info
+local tracking = exports.noc_bounty:GetTrackingInfo()
+
+-- Check if tracking a bounty
+local isTracking = exports.noc_bounty:IsTracking()
+
+-- Abandon current bounty
+exports.noc_bounty:AbandonBounty()
+
+-- Get nearby clues (if tracking)
+local clues = exports.noc_bounty:GetNearbyClues()</code></pre>
+                        
+                        <h3>Events</h3>
+                        
+                        <pre><code>-- Server: When a bounty is created
+TriggerEvent('noc_bounty:bountyCreated', bountyData)
+
+-- Server: When a bounty is claimed
+TriggerEvent('noc_bounty:bountyClaimed', hunterId, targetId, reward, isAlive)
+
+-- Server: When hunter reputation changes
+TriggerEvent('noc_bounty:reputationChanged', hunterId, newRep, delta)
+
+-- Client: When tracking updates
+TriggerClientEvent('noc_bounty:trackingUpdate', hunterId, trackingData)
+
+-- Client: When new clue is found
+TriggerClientEvent('noc_bounty:clueFound', hunterId, clueData)</code></pre>
+                        
+                        <div class="info-box">
+                            <div class="info-box-title">🔧 Need Help?</div>
+                            <p style="margin: 0;">Something not working right? We're here to help. Join our <a href="https://discord.gg/nightowlcodes">Discord</a> and open a ticket. We'll get you back on the trail in no time.</p>
+                        </div>
+                        
+                        <!-- Navigation Footer -->
+                        <div class="nav-footer">
+                            <a href="noc_telegraph.html" class="nav-footer-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <div>
+                                    <div class="nav-footer-label">Previous</div>
+                                    <div class="nav-footer-title">noc_telegraph</div>
+                                </div>
+                            </a>
+                            <a href="../index.html" class="nav-footer-item">
+                                <div>
+                                    <div class="nav-footer-label">Next</div>
+                                    <div class="nav-footer-title">Getting Started</div>
+                                </div>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+                
+                <!-- Table of Contents Sidebar -->
+                <aside class="toc-sidebar">
+                    <div class="toc-title">On this page</div>
+                    <ul class="toc-list">
+                        <li class="toc-item"><a href="#installation">Installation</a></li>
+                        <li class="toc-item"><a href="#configuration">Configuration</a></li>
+                        <li class="toc-item"><a href="#bounty-types">Bounty Types</a></li>
+                        <li class="toc-item"><a href="#tracking">Tracking System</a></li>
+                        <li class="toc-item"><a href="#api">API Reference</a></li>
+                    </ul>
+                </aside>
+            </div>
+            
+            <!-- Footer -->
+            <footer class="footer">
+                <span>&copy; 2024 Night Owl Codes. All rights reserved.</span>
+                <div class="footer-links">
+                    <a href="https://nightowlcodes.com">Store</a>
+                    <a href="https://discord.gg/nightowlcodes">Discord</a>
+                    <a href="https://github.com/night-owl-codes">GitHub</a>
+                </div>
+            </footer>
+        </main>
+    </div>
+    
+    <script src="../scripts/main.js"></script>
+</body>
+</html>
